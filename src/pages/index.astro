@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const announcements = await getCollection('announcements');
+const sorted = announcements.sort((a, b) =>
+  b.data.announcedAt.getTime() - a.data.announcedAt.getTime()
+);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<Base>
+  <div class="hero">
+    <h1>THE IPv6 AGENDA</h1>
+    <p class="subtitle">Tracking every move "they" make to force IPv6 upon us.</p>
+    <p class="stats">
+      <strong>{announcements.length}</strong> documented incidents of IPv6 propaganda
+    </p>
+  </div>
+
+  <section class="announcements">
+    {sorted.map((announcement) => (
+      <article class={`announcement severity-${announcement.data.severity}`}>
+        <div class="announcement-header">
+          <span class="severity-badge">{announcement.data.severity.toUpperCase()}</span>
+          <time>{formatDate(announcement.data.announcedAt)}</time>
+        </div>
+        <h2>
+          <a href={`/announcements/${announcement.id}`}>{announcement.data.title}</a>
+        </h2>
+        <p class="source">
+          Source: <a href={announcement.data.url} target="_blank" rel="noopener">{announcement.data.source}</a>
+        </p>
+      </article>
+    ))}
+  </section>
+</Base>

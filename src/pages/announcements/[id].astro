@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const announcements = await getCollection('announcements');
+  return announcements.map((announcement) => ({
+    params: { id: announcement.id },
+    props: { announcement },
+  }));
+}
+
+const { announcement } = Astro.props;
+const { Content } = await render(announcement);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  });
+}
+---
+
+<Base title={`${announcement.data.title} | IPv6 Isn't Real`}>
+  <article class={`announcement-detail severity-${announcement.data.severity}`}>
+    <div class="back-link">
+      <a href="/">&larr; Back to all announcements</a>
+    </div>
+
+    <header>
+      <span class="severity-badge">{announcement.data.severity.toUpperCase()}</span>
+      <time>{formatDate(announcement.data.announcedAt)}</time>
+    </header>
+
+    <h1>{announcement.data.title}</h1>
+    <p class="source">
+      Source: <a href={announcement.data.url} target="_blank" rel="noopener">{announcement.data.source}</a>
+    </p>
+
+    <div class="full-description">
+      <h3>The Evidence:</h3>
+      <Content />
+    </div>
+
+    <a href={announcement.data.url} target="_blank" rel="noopener" class="read-original">
+      Read the original article &rarr;
+    </a>
+
+    <div class="warning-box">
+      <p>Remember: Every IPv6 announcement is another step in their plan. Stay vigilant.</p>
+    </div>
+  </article>
+</Base>
