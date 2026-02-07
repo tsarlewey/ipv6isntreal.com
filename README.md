@@ -89,11 +89,6 @@ Also: yes, obviously IPv6 is real and this is satire. The protocol is fine. The 
 
 Because it's funny. And because if you can't access this site, you've already been assimilated.
 
-## LEGAL
-
-This is a parody/satire project. All "announcements" are dramatized interpretations of real technology news. No actual conspiracy is alleged.
-
-The real conspiracy is that we convinced you to read a README file.
 
 ## FINAL TRANSMISSION
 
